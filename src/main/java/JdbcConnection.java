@@ -38,7 +38,7 @@ public enum JdbcConnection {
             e.printStackTrace();
         }
     }
-
+    //metoda łącząca się z bazą
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, user, password);
     }

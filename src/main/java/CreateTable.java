@@ -6,7 +6,10 @@ public class CreateTable {
 
     public static void main(String[] args) throws SQLException {
 
+        // odpowiada za połączenie z bazą danych
         Connection connection = JdbcConnection.MYSQL_JAVA6.getConnection();
+
+        //Statement - to jest interfejs
         Statement createTable = connection.createStatement();
         //tworznie tabeli w sql
         // execute daje true jezeli zwraca jakis wynik,
