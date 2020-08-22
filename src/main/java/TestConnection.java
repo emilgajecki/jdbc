@@ -15,6 +15,7 @@ public class TestConnection {
             InstantiationException, SQLException {
 
         //połączylismy sie do bazy
+        // załadowanie sterownika
         Class.forName("com.mysql.cj.jdbc.Driver").getConstructor().newInstance();
         Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/java6?serverTimezone=UTC",
                 "root",
