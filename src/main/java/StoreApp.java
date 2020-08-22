@@ -85,6 +85,7 @@ public class StoreApp {
         System.out.print("3. Usuń tabele ");
         System.out.print("4. Zobacz co mamy w tabeli ");
         System.out.print("5. Dodoaj produkt ");
+        System.out.print("6. Znajdz wiersz o nr ");
         System.out.print("0. Koniec ");
 
         while (!scanner.hasNextInt()) {
@@ -95,6 +96,21 @@ public class StoreApp {
         int option = scanner.nextInt();
         scanner.nextLine();
         return option;
+    }
+
+    // utworzenie wyszukiwania dla jednego id
+    static void selectIdFromStoreTableByID(Connection connection) throws SQLException {
+        System.out.println("Wpisz ID:");
+        String id = scanner.nextLine();
+
+        Statement select = connection.createStatement();
+        //zwraca resulset
+        ResultSet set = select.executeQuery("select * from store where id = "+id);
+        while (set.next()){
+            int id1 = set.getInt("id");
+            String name1 = set.getString("name");
+            System.out.println(id1+ " "+ name1);
+        }
     }
 
     public static void main(String[] args) throws SQLException {
@@ -117,6 +133,9 @@ public class StoreApp {
                     break;
                 case 5:
                     insertRowIntoStoreTable(connection);
+                    break;
+                case 6:
+                    selectIdFromStoreTableByID(connection);
                     break;
                 case 0:
                     return;
