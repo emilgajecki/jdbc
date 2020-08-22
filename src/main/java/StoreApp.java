@@ -18,20 +18,19 @@ public class StoreApp {
                 "");
         create.close();
     }
-
+    // metoda wstawiajace dane z odpowiednimi wartosciami
     static void insertRowsIntoStoreTable(Connection connection) throws SQLException {
         Statement insert = connection.createStatement();
         insert.executeUpdate("insert into store values (1, 'Jack Daniels', 'whisky', 40.0, 0,7)");
         insert.close();
     }
 
+    //usuniecie danych z tabeli
     static void deleteStoreTable (Connection connection) throws SQLException {
         Statement drop = connection.createStatement();
         drop.execute("drop table store ");
         drop.close();
     }
-
-
 
     public static void main(String[] args) {
 
