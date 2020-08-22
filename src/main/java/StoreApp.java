@@ -80,6 +80,45 @@ public class StoreApp {
         insert.close();
     }
 
+    //dodamy towar pod warunkiem, ze cos juz jest takiego w bazie
+    //pokretna logika - chce dodac 2 razy wiecej
+    static void insertIntoResultSet(Connection connection) throws SQLException {
+        Statement select = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
+        ResultSet set = select.executeQuery("SELECT * from store");
+        while(set.next()){
+            String category = set.getString("category");
+            if ("wine".equals(category)){
+                System.out.println("Wstaw nowy rekord");
+                //wstawiamy nowy rekord
+                set.moveToInsertRow();
+                System.out.println("Podaj nazwe");
+                String name = scanner.nextLine();
+                System.out.println("Podaj zawartosc");
+                float voltage= scanner.nextFloat();
+                System.out.println("Podaj objętość");
+                float capacity= scanner.nextFloat();
+                scanner.nextLine();// czyszczenie klawiatury
+                set.updateString("name", name);
+                set.updateBigDecimal("voltage", new BigDecimal(voltage));
+                set.updateBigDecimal("capacity", new BigDecimal(capacity));
+                set.updateString("category", "wine");
+                set.insertRow();
+                set.next();
+            }
+        }
+    }
+    // usuniecie konkretnego wiesza - podczas przegladania
+    static void deleteFromRowStoreTable (Connection connection) throws SQLException {
+        System.out.println("Podaj id usuwanego wiersza:");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        Statement delete = connection.createStatement();
+        ResultSet set = delete.executeQuery("select * from store");
+        if(id==set.getInt("id")){
+            set.deleteRow();
+        }
+    }
+
 
     static int menu() {
         System.out.print("1. Utwórz tabelę ");
@@ -88,6 +127,7 @@ public class StoreApp {
         System.out.print("4. Zobacz co mamy w tabeli ");
         System.out.print("5. Dodoaj produkt ");
         System.out.print("6. Znajdz wiersz o nr ");
+        System.out.print("7. Dodaj nowy produkt - wino jezeli jest w tabeli wino ");
         System.out.print("0. Koniec ");
 
         while (!scanner.hasNextInt()) {
@@ -147,6 +187,9 @@ public class StoreApp {
                     break;
                 case 6:
                     selectIdFromStoreTableByID(connection);
+                    break;
+                case 7:
+                    insertIntoResultSet(connection);
                     break;
                 case 0:
                     return;
