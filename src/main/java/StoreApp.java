@@ -1,8 +1,5 @@
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Scanner;
 
 public class StoreApp {
@@ -103,9 +100,18 @@ public class StoreApp {
         System.out.println("Wpisz ID:");
         String id = scanner.nextLine();
 
-        Statement select = connection.createStatement();
+        // z wada dostepu do bazy 1 or 1=1
+        //Statement select = connection.createStatement();
+        // ? na koncu zapytania oznacza, ze w tym miejcu należy wstawić parametr
+        PreparedStatement select = connection.prepareStatement("select * from store where id =?");
+
         //zwraca resulset
-        ResultSet set = select.executeQuery("select * from store where id = "+id);
+        //parsujemy z stinga id na int
+        select.setInt(1, Integer.parseInt(id));
+        ResultSet set = select.executeQuery();
+
+        //z wada dostepu do bazy 1 or 1=1
+        //ResultSet set = select.executeQuery("select * from store where id = "+id);
         while (set.next()){
             int id1 = set.getInt("id");
             String name1 = set.getString("name");
