@@ -16,7 +16,7 @@ public class StoreApp {
                 "name varchar (25), " +
                 "category enum ('beer', 'whisky', 'vodka', 'wine'), " +
                 "voltage decimal (4,1)," +
-                "capacity decimal (4,3));" +
+                "capacity decimal (2,1));" +
                 "");
         create.close();
     }
@@ -68,13 +68,9 @@ public class StoreApp {
         System.out.println("Wprowadź pojemność");
         float capacity = scanner.nextFloat();
 
-//        Statement insert = connection.createStatement();
-//        int count = insert.executeUpdate("insert into store (`name`, `category`,`voltage`,`capacity`) " +
-//                "values ('" + name + "','" + category + "'," + voltage + "," + capacity + ");"
-//        );
 
-        PreparedStatement insert = connection.prepareStatement("insert into"+
-                "storage(`name`,`category`,`voltage`,`capacity`)" + "values(?, ?, ?, ?);");
+        PreparedStatement insert = connection.prepareStatement("insert into "+
+                "store(`name`,`category`,`voltage`,`capacity`)" + "values(?, ?, ?, ?);");
         insert.setString(1,name);
         insert.setString(2,category);
         insert.setBigDecimal(4,new BigDecimal(capacity));
