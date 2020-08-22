@@ -1,4 +1,6 @@
+import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
@@ -13,7 +15,7 @@ public class StoreApp {
         Statement create = connection.createStatement();
         create.execute("create table store" +
                 "(" +
-                "id integer primary key, " +
+                "id integer primary key auto_increment, " +
                 "name varchar (25), " +
                 "category enum ('beer', 'whisky', 'vodka', 'wine'), " +
                 "voltage decimal (4,1)," +
@@ -36,26 +38,72 @@ public class StoreApp {
         drop.close();
     }
 
+    //tworzymy select - pobieranie danych i wyswietlanie danych
+    static void showRowsFromStoreTable(Connection connection) throws SQLException {
+        Statement select = connection.createStatement();
+        ResultSet set = select.executeQuery("select * from store");
+
+        //set w tej petki to nasz przegladany wiersz
+        while (set.next()) {
+            //pobranie kolumny z nazwa kolumny
+            //konwersja typu bazodanowego na java
+            // w bazie danych jest varchar a w javie odpowiada to Sting
+            int id = set.getInt("id");
+            String name = set.getString("name");
+            String category = set.getString("category");
+            BigDecimal voltage = set.getBigDecimal("voltage");
+            BigDecimal capacity = set.getBigDecimal("capacity");
+            System.out.println(id + " " + name + " " + category + " " + voltage + " " + capacity);
+        }
+        set.close();
+        select.close();
+    }
+
+    // dodoanei mechanizmy do recznego dodwania danych w bazie
+    static void insertRowIntoStoreTable(Connection connection) throws SQLException {
+        System.out.println("Wpisz nazwę:");
+        String name = scanner.nextLine();
+        System.out.println("Wpisz kategorę");
+        String category = scanner.nextLine();
+        System.out.println("Wpisz zawartość alkoholu");
+        float voltage = scanner.nextFloat();
+        System.out.println("Wprowadź pojemność");
+        float capacity = scanner.nextFloat();
+
+        Statement insert = connection.createStatement();
+        int count = insert.executeUpdate("insert into store (`name`, `category`,`voltage`,`capacity`) " +
+                "values ('" + name + "','" + category + "'," + voltage + "," + capacity + ");"
+        );
+        System.out.println(count ==1 ? "Sukces" : "Błąd");
+        insert.close();
+    }
+
+
     static int menu() {
         System.out.print("1. Utwórz tabelę ");
         System.out.print("2. Dodaj kilka rekordów ");
         System.out.print("3. Usuń tabele ");
+        System.out.print("4. Zobacz co mamy w tabeli ");
+        System.out.print("5. Dodoaj produkt ");
         System.out.print("0. Koniec ");
 
         while (!scanner.hasNextInt()) {
             System.out.println("Wpisz nr polecenia z menu!!!");
             scanner.nextLine();
         }
-        return scanner.nextInt();
+        // scaner czyta wszystko z inta - enter zostawał wiec jest blad
+        int option = scanner.nextInt();
+        scanner.nextLine();
+        return option;
     }
 
     public static void main(String[] args) throws SQLException {
 
         Connection connection = JdbcConnection.MYSQL_JAVA6.getConnection();
-        while (true){
+        while (true) {
             final int option = menu();
-            switch (option){
-                case 1 :
+            switch (option) {
+                case 1:
                     createStoreTable(connection);
                     break;
                 case 2:
@@ -63,6 +111,12 @@ public class StoreApp {
                     break;
                 case 3:
                     deleteStoreTable(connection);
+                    break;
+                case 4:
+                    showRowsFromStoreTable(connection);
+                    break;
+                case 5:
+                    insertRowIntoStoreTable(connection);
                     break;
                 case 0:
                     return;
