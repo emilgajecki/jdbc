@@ -57,6 +57,7 @@ public class StoreApp {
     }
 
     // dodoanei mechanizmy do recznego dodwania danych w bazie
+    // z poprawiona funkcjonalnoscia
     static void insertRowIntoStoreTable(Connection connection) throws SQLException {
         System.out.println("Wpisz nazwę:");
         String name = scanner.nextLine();
@@ -67,10 +68,18 @@ public class StoreApp {
         System.out.println("Wprowadź pojemność");
         float capacity = scanner.nextFloat();
 
-        Statement insert = connection.createStatement();
-        int count = insert.executeUpdate("insert into store (`name`, `category`,`voltage`,`capacity`) " +
-                "values ('" + name + "','" + category + "'," + voltage + "," + capacity + ");"
-        );
+//        Statement insert = connection.createStatement();
+//        int count = insert.executeUpdate("insert into store (`name`, `category`,`voltage`,`capacity`) " +
+//                "values ('" + name + "','" + category + "'," + voltage + "," + capacity + ");"
+//        );
+
+        PreparedStatement insert = connection.prepareStatement("insert into"+
+                "storage(`name`,`category`,`voltage`,`capacity`)" + "values(?, ?, ?, ?);");
+        insert.setString(1,name);
+        insert.setString(2,category);
+        insert.setBigDecimal(4,new BigDecimal(capacity));
+        insert.setBigDecimal(3, new BigDecimal(voltage));
+        int count= insert.executeUpdate();
         System.out.println(count ==1 ? "Sukces" : "Błąd");
         insert.close();
     }
