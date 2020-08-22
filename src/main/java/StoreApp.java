@@ -18,6 +18,11 @@ public class StoreApp {
                 "");
     }
 
+    static void insertRowsIntoStore(Connection connection) throws SQLException {
+        Statement insert = connection.createStatement();
+        insert.executeUpdate("insert into store values (1, 'Jack Daniels', 'whisky', 40.0, 0,7)");
+    }
+
 
 
     public static void main(String[] args) {
