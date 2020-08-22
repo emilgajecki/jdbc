@@ -116,6 +116,8 @@ public class StoreApp {
         ResultSet set = delete.executeQuery("select * from store");
         if(id==set.getInt("id")){
             set.deleteRow();
+            set.close();
+            return;
         }
     }
 
