@@ -5,6 +5,8 @@ import java.sql.SQLException;
 
 public enum JdbcConnection {
 
+    //wzorzec singleton
+    // tworzymy enum poniewż chcemy tylko, aby istniał jeden obiekt tej klasy.
     //Tworzymy konstruktor do połączeń z bazą
     //
     MYSQL_JAVA6("jdbc:mysql://localhost:3306/java6?serverTimezone=UTC",
@@ -16,7 +18,7 @@ public enum JdbcConnection {
     private final String driverClassName;
 
 
-
+    // konstruktor
     JdbcConnection(String url, String user, String password, String driverClassName) {
         this.url = url;
         this.user = user;
