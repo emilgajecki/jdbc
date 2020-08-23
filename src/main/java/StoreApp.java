@@ -193,6 +193,8 @@ public class StoreApp {
                 case 7:
                     insertIntoResultSet(connection);
                     break;
+                case 9:
+                    
                 case 0:
                     return;
             }
