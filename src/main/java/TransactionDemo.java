@@ -20,6 +20,11 @@ public class TransactionDemo {
         public static void main(String[] args) throws SQLException {
             int pointsToTransfer = 20;
             Connection connection = JdbcConnection.MYSQL_JAVA6.getConnection();
+            connection.setAutoCommit(false);
+            //ustawianie izolacji
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            // wyznaczenie bezpiecznego punktu do którego możemy się cofnąc
+            Savepoint start =connection.setSavepoint("start");
             //createTableAccount(connection);
             //Pobieramy z konta o id = 1 liczbę punktów  pointsToTransfer
             int sourcePoints = getPointsFromAccount(connection, 1);
@@ -44,8 +49,15 @@ public class TransactionDemo {
             transferTo.setInt(2, 2);
             transferTo.executeUpdate();
             transferTo.close();
+            int sum = sourcePoints +targetPoints;
             sourcePoints = getPointsFromAccount(connection, 1);
             targetPoints =getPointsFromAccount(connection,2);
+            //obsługa warunków bezpiecznego lacza
+            if(sum == sourcePoints+targetPoints){
+                connection.commit();
+            } else {
+                connection.rollback(start);
+            }
             System.out.println("Stan konta 1 po transferze "+sourcePoints);
             System.out.println("Stan konta 2 po transferze "+targetPoints);
 
