@@ -10,7 +10,7 @@ public enum JdbcConnection {
     //Tworzymy konstruktor do połączeń z bazą
     //
     MYSQL_JAVA6("jdbc:mysql://localhost:3306/java6?serverTimezone=UTC",
-              "root", "Kamczactiusz10!","com.mysql.cj.jdbc.Driver");
+              "root", "poleHasla","com.mysql.cj.jdbc.Driver");
 
     private final String url;
     private final String user;
